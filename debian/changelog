@@ -1,8 +1,8 @@
-libnabo (1.0.4-0trusty) trusty; urgency=low
+libnabo (1.0.6-0xenial) xenial; urgency=low
 
   * Latest upstream
 
- -- Samuel Bachmann (Launchpad Key) <samuel.bachmann@gmail.com>  Tue, 03 Sep 2013 14:01:26 +0200
+ -- Samuel Bachmann <samuel.bachmann@gmail.com>  Wen, 22 Mar 2017 14:01:26 +0200
 
 libnabo (1.0.1) natty; urgency=low
 
