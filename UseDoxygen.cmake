@@ -69,7 +69,7 @@ if(DOXYGEN_FOUND AND DOXYFILE_IN_FOUND)
 		ADDITIONAL_MAKE_CLEAN_FILES
 		"${DOXYFILE_OUTPUT_DIR}/${DOXYFILE_HTML_DIR}")
 
-	add_custom_target(doxygen
+	add_custom_target(doxygen ALL
 		COMMAND ${DOXYGEN_EXECUTABLE}
 			${DOXYFILE} 
 		COMMENT "Writing documentation to ${DOXYFILE_OUTPUT_DIR}..."
@@ -109,8 +109,7 @@ if(DOXYGEN_FOUND AND DOXYFILE_IN_FOUND)
 
 	configure_file(${DOXYFILE_IN} Doxyfile IMMEDIATE @ONLY)
 
-	get_target_property(DOC_TARGET doc TYPE)
-	if(NOT DOC_TARGET)
+	if(NOT TARGET doc)
 		add_custom_target(doc)
 	endif()
 

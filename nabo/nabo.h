@@ -41,7 +41,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 #include <vector>
 #include <map>
-#include <boost/any.hpp>
+#include "third_party/any.hpp"
 
 /*! 
 	\file nabo.h
@@ -62,7 +62,6 @@ On the average, libnabo is 5% to 20% faster than \ref ANN.
 
 libnabo depends on \ref Eigen, a modern C++ matrix and linear-algebra library.
 libnabo works with either version 2 or 3 of Eigen.
-libnabo also depends on \ref Boost, a C++ general library.
 
 \section Compilation
 
@@ -72,7 +71,7 @@ You will find a nice introductory tutorial in this you tube video: http://www.yo
 
 \subsection Prerequisites
 
-If your operating system does not provide it, you must get \ref Eigen and \ref Boost.
+If your operating system does not provide it, you must get \ref Eigen.
 \ref Eigen only needs to be downloaded and extracted.
 
 \subsection CompilationOptions Compilation options
@@ -85,15 +84,15 @@ Please read the <a href="http://www.cmake.org/cmake/help/cmake2.6docs.html">CMak
 
 \subsection QuickCompilationUnix Quick compilation and installation under Unix
 
-Under Unix, assuming that \ref Eigen and \ref Boost are installed system-wide, you can compile (with optimisation and debug information) and install libnabo in \c /usr/local with the following commands run in the top-level directory of libnabo's sources:
+Under Unix, assuming that \ref Eigen is installed system-wide, you can compile (with optimisation and debug information) and install libnabo in \c /usr/local with the following commands run in the top-level directory of libnabo's sources:
 \code
 SRC_DIR=`pwd`
 BUILD_DIR=${SRC_DIR}/build
 mkdir -p ${BUILD_DIR} && cd ${BUILD_DIR}
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ${SRC_DIR}
-# if Eigen or Boost are not available system-wide, run at that point: 
+# if Eigen is not available system-wide, run at that point:
 #   cmake-gui .
-# cmake-gui allows you to tell the location of Eigen or Boost
+# cmake-gui allows you to tell the location of Eigen
 make
 sudo make install
 \endcode
@@ -101,7 +100,7 @@ sudo make install
 These lines will compile libnabo in a \c build sub-directory and therefore keep your source tree clean.
 Note that you could compile libnabo anywhere you have write access, such as in \c /tmp/libnabo.
 This out-of-source build is a nice feature of \ref CMake.
-If \ref Eigen or \ref Boost are not installed system-wide, you might have to tell \ref CMake where to find them (using \c ccmake or \c cmake-gui).
+If \ref Eigen is not installed system-wide, you might have to tell \ref CMake where to find them (using \c ccmake or \c cmake-gui).
 
 You can generate the documentation by typing:
 \code
@@ -192,14 +191,13 @@ libnabo differs from \ref ANN on the following points:
 
 * performances
 - about 5% to 20% faster than ANN (both -O3 -NDEBUG), probably due to the smaller memory footprint
-- clearly memory-bound, neither OpenMP nor boost::thread improve performances 
+- clearly memory-bound, neither OpenMP nor std::thread improve performances 
 
 \section References
 
 \li \anchor Eigen Eigen: http://eigen.tuxfamily.org
 \li \anchor ANN ANN: http://www.cs.umd.edu/~mount/ANN
 \li \anchor CMake CMake: http://www.cmake.org
-\li \anchor Boost Boost: http://www.boost.org
 
 */
 
@@ -213,9 +211,24 @@ namespace Nabo
 	#define NABO_VERSION "1.0.6"
 	//! version of the Nabo library as an int
 	#define NABO_VERSION_INT 10006
-	
+
+	// TODO (c++14) Convert invalidIndex, invalidValue to constexpr templated variables.
+	template <typename IndexType>
+	inline constexpr IndexType invalidIndex() {
+		static_assert(std::is_integral<IndexType>::value, "");
+		return std::is_unsigned<IndexType>::value ? std::numeric_limits<IndexType>::max() : IndexType(-1);
+	}
+
+	template <typename ValueType>
+	inline constexpr ValueType invalidValue() {
+		static_assert(std::is_floating_point<ValueType>::value, "");
+		return std::numeric_limits<ValueType>::infinity();
+	}
+
 	//! Parameter vector
-	struct Parameters: public std::map<std::string, boost::any>
+	//
+	// TODO: replace with C++17 std::any.
+	struct Parameters: public std::map<std::string, linb::any>
 	{
 		//! Create an empty parameter vector
 		Parameters(){}
@@ -223,7 +236,7 @@ namespace Nabo
 		/** \param key entry key
 		 * \param value entry value
 		 */
-		Parameters(const std::string& key, const boost::any& value){(*this)[key] = value;}
+		Parameters(const std::string& key, const linb::any& value){(*this)[key] = value;}
 		//! Get the value of a key, return defaultValue if the key does not exist
 		/** \param key requested key
 		 * \param defaultValue value to return if the key does not exist
@@ -234,7 +247,7 @@ namespace Nabo
 		{
 			const_iterator it(find(key));
 			if (it != end())
-				return boost::any_cast<T>(it->second);
+				return linb::any_cast<T>(it->second);
 			else
 				return defaultValue;
 		}
@@ -267,7 +280,12 @@ namespace Nabo
 		const Vector minBound;
 		//! the high bound of the search space (axis-aligned bounding box)
 		const Vector maxBound;
-		
+
+		//! the invalid index
+		static constexpr Index InvalidIndex = invalidIndex<Index>();
+		//! the invalid value
+		static constexpr T InvalidValue = invalidValue<T>();
+
 		//! type of search
 		enum SearchType
 		{
@@ -294,7 +312,7 @@ namespace Nabo
 		};
 		
 		//! Find the k nearest neighbours of query
-		/*!	If the search finds less than k points, the empty entries in dists2 will be filled with infinity and the indices with 0. If you must query more than one point at once, use the version of the knn() function taking matrices as input, because it is much faster.
+		/*!	If the search finds less than k points, the empty entries in dists2 will be filled with InvalidValue and the indices with InvalidIndex. If you must query more than one point at once, use the version of the knn() function taking matrices as input, because it is much faster.
 		 *	\param query query point
 		 *	\param indices indices of nearest neighbours, must be of size k
 		 *	\param dists2 squared distances to nearest neighbours, must be of size k
@@ -307,7 +325,7 @@ namespace Nabo
 		unsigned long knn(const Vector& query, IndexVector& indices, Vector& dists2, const Index k = 1, const T epsilon = 0, const unsigned optionFlags = 0, const T maxRadius = std::numeric_limits<T>::infinity()) const;
 		
 		//! Find the k nearest neighbours for each point of query
-		/*!	If the search finds less than k points, the empty entries in dists2 will be filled with infinity and the indices with 0.
+		/*!	If the search finds less than k points, the empty entries in dists2 will be filled with InvalidValue and the indices with InvalidIndex.
 		 *	\param query query points
 		 *	\param indices indices of nearest neighbours, must be of size k x query.cols()
 		 *	\param dists2 squared distances to nearest neighbours, must be of size k x query.cols() 
@@ -320,7 +338,7 @@ namespace Nabo
 		virtual unsigned long knn(const Matrix& query, IndexMatrix& indices, Matrix& dists2, const Index k = 1, const T epsilon = 0, const unsigned optionFlags = 0, const T maxRadius = std::numeric_limits<T>::infinity()) const = 0;
 		
 		//! Find the k nearest neighbours for each point of query
-		/*!	If the search finds less than k points, the empty entries in dists2 will be filled with infinity and the indices with 0.
+		/*!	If the search finds less than k points, the empty entries in dists2 will be filled with InvalidValue and the indices with InvalidIndex.
 		 *	\param query query points
 		 *	\param indices indices of nearest neighbours, must be of size k x query.cols()
 		 *	\param dists2 squared distances to nearest neighbours, must be of size k x query.cols() 
