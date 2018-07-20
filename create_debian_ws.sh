@@ -12,13 +12,13 @@ declare -a DIRECTORIES=(
 )
 
 declare -a FILES=(
-  "CMakeLists.txt"
   "CHANGELOG.rst"
-  "package.xml"
   "cmake_uninstall.cmake.in"
+  "CMakeLists.txt"
   "Doxyfile.in"
   "libnaboConfig.cmake.in"
   "libnaboConfigVersion.cmake.in"
+  "package.xml"
   "README.md"
   "UseDoxygen.cmake"
 )
@@ -37,4 +37,4 @@ done
 
 cd ws/${PACKAGE}
 
-tar -cJ --exclude='./debian' -f ../libnabo_1.0.4.orig.tar.xz .
+tar -cJ --exclude='./debian' -f ../libnabo_1.0.7.orig.tar.xz .

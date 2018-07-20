@@ -2,6 +2,113 @@
 Changelog for package libnabo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.0.7 (2017-07-20)
+------------------
+* Minor cleanups as suggested for `#89 <https://github.com/samuelba/libnabo/issues/89>`_.
+* port to c++11
+* Fix Python 2 bindings support in CMake scripts
+  `#57 <https://github.com/samuelba/libnabo/issues/57>`_ introduced two issues:
+  * wrong name for the variable that holds Boost Python component;
+  * unconditional search for `python3`.
+* Remove register keyword in index_heap.h
+  register keyword has been deprecated. It has no effect in c++11 and was removed in c++17
+* Fix compilation error for MSVC
+  When instantiating the template function fill with float/double, MSVC will emit an error.
+* Assert template type for invalid setters (`#80 <https://github.com/samuelba/libnabo/issues/80>`_)
+  Ensure at compile time that template parameters conform to our assumptions
+  * cr
+* Add generate step for ${PROJECT_BINARY_DIR}/libnaboConfig.cmake as well (addressing `#75 <https://github.com/samuelba/libnabo/issues/75>`_)
+  This expands the generator expressions in some of the exported variables
+* Return numerically maximal index (unsigned) or -1 (signed) for no match case  (`#79 <https://github.com/samuelba/libnabo/issues/79>`_)
+  Additionally, provide public static access to invalid index and invalid distance values.
+* Removed erroneous commas from test/CMakeLists.txt
+* Removed fatal "," suffix from FATAL_ERROR
+* Added cmake_policy(SET CMP0054 NEW)
+* Merge pull request `#72 <https://github.com/samuelba/libnabo/issues/72>`_ from ethz-asl/fix/outputProblemWithCompilationTestFatalError
+  Output compiler output with compile test fatal error
+* Output compiler output with compile test fatal error
+* Merge pull request `#65 <https://github.com/samuelba/libnabo/issues/65>`_ from ethz-asl/fix/installedConfigFile
+  Fixed regression introduced with af3b638bc2a3 concerning installed libnaboConfig.cmake
+* Fixed regression introduced with af3b638bc2a3 concerning installed libnaboConfig.cmake
+* Merge pull request `#63 <https://github.com/samuelba/libnabo/issues/63>`_ from ethz-asl/fix/relaxCompilerRequirementsAndCleanup
+  Fix/relax compiler requirements and cleanup
+* Update CMakeLists.txt
+* Merge pull request `#57 <https://github.com/samuelba/libnabo/issues/57>`_ from davidlandry93/master
+  Port the python bindings to python3
+* Fixed tabs instead of spaces
+* Fixed error on target_property of non existing target
+* Removed hard dependency on doc generation
+* Fixed broken link.
+  Changed link to deleted Simon Lynen's ASL homepage for github's user summary.
+* Relaxed compiler requirements
+  Clang to 3.3 and GNU to 4.8.2
+* Cleaned up compiler checks in CMakeLists
+* Merge pull request `#61 <https://github.com/samuelba/libnabo/issues/61>`_ from ethz-asl/fix/installAny
+  Install any.hpp
+* Moved third_party to nabo/third_party
+* Install any.hpp
+* Remove boost dependencies.
+* Second run of comments for the pull request
+* Fixed an accidental deletion
+* Addressed the comments of pr `#57 <https://github.com/samuelba/libnabo/issues/57>`_
+* Fiddled with the build to make it arch linux compatible
+* update changelog
+* Merge remote-tracking branch 'upstream/master' into debian
+* Merge branch 'master' into master
+* Merge pull request `#55 <https://github.com/samuelba/libnabo/issues/55>`_ from ethz-asl/fix/whitespaceCleanup
+  White space cleanup
+* Fixed whitespace problems
+* Added documentation
+* Ported the test file to python3
+* Now link against appropriate boost-python library.
+* The cpp now builds with python3
+* Cmake does not crash when using python3
+* add missing libnaboConfig.cmake files to debian install scripts
+* White space cleanup (addressing `#54 <https://github.com/samuelba/libnabo/issues/54>`_)
+* Merge pull request `#53 <https://github.com/samuelba/libnabo/issues/53>`_ from ethz-asl/feature/openMpCmakeSwitch
+  Added cmake switch to disable usage of OpenMP
+* Added CMake switch to disable usage of OpenMP
+* Merge pull request `#44 <https://github.com/samuelba/libnabo/issues/44>`_ from ethz-asl/fix/remove_git_checkout_instructions
+  Removed instructions how to update to a certain branch
+* Removed instructions how to update to a certain version
+  Removed, since this should be common knowledge, and might only be confusing, if one just copy-pastes the instructions.
+* Merge pull request `#43 <https://github.com/samuelba/libnabo/issues/43>`_ from ethz-asl/feature/zero_copy
+  Zero copy for Eigen::Matrix3XT and Eigen::Map<const Eigen::Matrix3XT>
+* adr comments
+* Merge remote-tracking branch 'origin/master' into feature/zero_copy
+* Merge pull request `#42 <https://github.com/samuelba/libnabo/issues/42>`_ from ethz-asl/fix/warning
+  Fix warnings and switch on Werror
+* adr comments
+* rm debug and test dynamic
+* Update CMakeLists.txt
+* tabulate
+* Reenable compile tests
+* Test support for Eigen::Map
+* Added template instantiations for Eigen::Map<const Eigen::Matrix3Xf, Eigen::Aligned>
+* Add missing template instantiation
+* Change test to validate Matrix3Xf
+* Fix left over matrix
+* Fix warnings and switch on Werror
+* Make nabo a template of the cloud type
+* Merge pull request `#41 <https://github.com/samuelba/libnabo/issues/41>`_ from simonlynen/fix/disallow_non_dynamic_matrix_types
+  Disallow instantiation with non dynamic matrices.
+* Adr @HannesSommer comments for `#41 <https://github.com/samuelba/libnabo/issues/41>`_
+* Disallow instantiation with non dynamic matrices.
+* Merge pull request `#38 <https://github.com/samuelba/libnabo/issues/38>`_ from tcies/patch-1
+  Pointing out that the nabo matrix must stay in scope.
+* Alive, not scoped.
+* Bold, not italic
+* Pointing out that the nabo matrix must stay in scope.
+  This cost me an entire day of looking for bugs. Grrr.
+* Merge pull request `#32 <https://github.com/samuelba/libnabo/issues/32>`_ from ethz-asl/fix/removedTargetsCmakeFile
+  removed all code dealing with libnaboTargets.cmake
+* Merge pull request `#27 <https://github.com/samuelba/libnabo/issues/27>`_ from ethz-asl/cleanup/locallyDefinedUnusedTypedefs
+  got rid of warnings (unused locally defined typedefs)
+* removed all code dealing with libnaboTargets.cmake
+  (addressing `#31 <https://github.com/samuelba/libnabo/issues/31>`_)
+* got rid of warnings (unused locally defined typedefs)
+* Contributors: Ce Zheng, David Landry, Fadri Furrer, Hannes Sommer, HannesSommer, Martin T. H. Sandsmark, Mathias Gehrig, Ning Ren, Samuel Bachmann, Sergey Alexandrov, Simon Lynen, Stéphane Magnenat, Titus Cieslewski
+
 1.0.6 (2015-03-05)
 ------------------
 * Reset point indices of results with distances exceeding threshold (#23, #24)
