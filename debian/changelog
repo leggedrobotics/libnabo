@@ -1,17 +1,5 @@
-libnabo (1.0.7-0xenial) xenial; urgency=low
+libnabo ($VERSION-0$DIST) $DIST; urgency=low
 
   * Latest upstream
 
- -- Samuel Bachmann <samuel.bachmann@gmail.com>  Fri, 20 Jul 2018 09:00:00 +0200
-
-libnabo (1.0.6-0xenial) xenial; urgency=low
-
-  * Latest upstream
-
- -- Samuel Bachmann <samuel.bachmann@gmail.com>  Wen, 22 Mar 2017 14:01:26 +0200
-
-libnabo (1.0.1) natty; urgency=low
-
-  * Latest upstream (including python bindings)
-
- -- Stéphane Magnenat <stephane@nospam.magnenat.net>  Tue, 10 Nov 2011 14:00:00 +0100
+ -- Samuel Bachmann <samuel.bachmann@gmail.com>  $TIMESTAMP
