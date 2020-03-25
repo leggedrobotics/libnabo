@@ -18,6 +18,6 @@ jobs:
     - name: generate
       run: mkdir build && cd build && cmake .. -DCMAKE_BUILD_TYPE=Release 
     - name: make
-      run: make -j
+      run: cd build && make -j
     - name: test
-      run: make test -j
+      run: cd build && make test -j
