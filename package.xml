@@ -13,8 +13,9 @@
 	<!-- The *_depend tags are used to specify dependencies -->
 	<build_depend>cmake</build_depend>
 	<depend>eigen</depend>
-	<depend>boost</depend>
+        <depend>boost</depend>
 	<exec_depend>catkin</exec_depend>
+	<test_depend>libflann-dev</test_depend>
 
 	<export>
 		<!-- Specify that this is not really a ROS package -->

@@ -2,6 +2,8 @@ include (CheckSymbolExists)
 
 include_directories(..)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
+
 add_executable(knnvalidate knnvalidate.cpp)
 target_link_libraries(knnvalidate ${LIB_NAME} ${EXTRA_LIBS})
 # disable as experimental is broken target_link_libraries(knnvalidate naboexperimental nabo  ${EXTRA_LIBS})
@@ -32,15 +34,7 @@ else (ANN_INCLUDE_DIR AND ANN_LIBRARY)
 	message("ANN not found, disabling it in benchmarks")
 endif (ANN_INCLUDE_DIR AND ANN_LIBRARY)
 
-find_path(FLANN_INCLUDE_DIR flann/flann.hpp
-	/usr/local/include/
-	/usr/include
-)
-find_library(FLANN_LIBRARY
-	flann_cpp
-	PATHS /usr/local/lib
-	/usr/lib
-)
+find_package(Flann)
 
 if (FLANN_INCLUDE_DIR AND FLANN_LIBRARY)
 	include_directories(${FLANN_INCLUDE_DIR})
