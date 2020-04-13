@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(libnabo)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 # Source and header files.
 set(NABO_SRC
   nabo/nabo.cpp
